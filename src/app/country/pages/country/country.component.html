@@ -1,0 +1,90 @@
+<div class="container-fluid d-flex justify-content-center flex-wrap gap-4">
+  
+  <!-- Reactive Form (select) -->
+  <form class="w-100 p-2 d-block" [formGroup]="selectorForm">
+
+    <h2 class="d-block text-center mt-2 mb-4">Country selector - reactive form</h2>
+
+    <!-- input Region -->
+    <div class="input-group mb-2">
+      <div class="form-floating">
+        <select 
+          class="form-select form-control"
+          formControlName="region"
+        >
+          <option value="">-- SELECT REGION --</option>
+          <option 
+            *ngFor="let region of regions"
+            [value]="region | lowercase"
+          >{{region}}</option>
+        </select>
+        <label class="form-label">Region</label>
+      </div>
+      <span class="input-group-text bg-info bg-opacity-25 fs-4"><i class="bi bi-globe"></i></span>
+    </div><!-- END - input Region -->
+
+    <!-- input Country -->
+    <div class="input-group mb-2" *ngIf="countries">
+      <div class="form-floating">
+        <select 
+          class="form-select form-control"
+          formControlName="country"
+        >
+          <option 
+            *ngFor="let country of countries"
+            [value]="country.cca2"
+          >{{country.name.common}}</option>
+        </select>
+        <label class="form-label">Country</label>
+      </div>
+      <span class="input-group-text bg-info bg-opacity-25 fs-4"><i class="bi bi-globe"></i></span>
+    </div><!-- END - input Country -->
+
+    <!-- input Borders -->
+    <div class="input-group mb-2" *ngIf="borders">
+      <div class="form-floating">
+        <select 
+          class="form-select form-control"
+          formControlName="borders"
+        >
+          <option value="null" *ngIf="borders.length == 0" selected>-- NOT BORDERS --</option>
+          <option 
+            *ngFor="let border of borders"
+            [value]="border"
+          >{{border}}</option>
+        </select>
+        <label class="form-label">Borders</label>
+      </div>
+      <span class="input-group-text bg-info bg-opacity-25 fs-4"><i class="bi bi-globe"></i></span>
+    </div><!-- END - input Borders -->
+
+    <!-- Alerta -->
+    <div class="alert alert-info d-flex align-items-center fs-3" *ngIf="loading">
+      <span class="spinner-border"></span> Loading...
+    </div>
+
+
+    <div class="row w-100 justify-content-end mt-4 mb-3">
+      <div class="col-4">
+        <button type="button" class="btn btn-primary bg-opacity-25 w-100" (click)="save();">Save</button>
+      </div>
+    </div>
+    
+  </form><!-- END - Reactive Form (select) -->
+
+
+  <div class="row w-100">
+
+    <div class="col-md-4">
+      <span class="h3">Form valid?</span>
+      <pre>{{selectorForm.valid}}</pre>
+    </div>
+
+    <div class="col-md-4">
+      <span class="h3">Form alues</span>
+      <pre>{{selectorForm.value | json}}</pre>
+    </div>
+
+  </div>
+
+</div>

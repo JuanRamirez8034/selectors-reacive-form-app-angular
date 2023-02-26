@@ -1,0 +1,8 @@
+form *{
+  transition: all 0.2s ease-in-out;
+}
+
+form {
+  box-shadow: 0 0 20px gray;
+  border-radius: 4px;
+}
