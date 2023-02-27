@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { combineLatest, map, Observable, of } from 'rxjs';
 import { SeacrhMode, SmallResp, Country } from '../interfaces/country.interface';
 
 
@@ -51,5 +51,24 @@ export class CountryService {
     let url = `${this.API_URL}/${mode.mode}/${mode.search}`;
 
     return this.http.get<Country[]>(url);
+  }
+
+  // funcion para buscar los nombres de los paises, retorna un pais
+  public getContrySmallByCode(code:string):Observable<SmallResp>{
+    return this.http.get<SmallResp>(`${this.API_URL}/alpha/${code}?fields=cca2,name`);
+  }
+
+  // funcion para buscar las capitales, recibe un arreglo de codigos de bordes de paises y retorna un arreglo con los datos de smallResp
+  public getCountryByArrayCodes(bordersCodes:string[]):Observable<SmallResp[]>{
+    
+    if(!bordersCodes || bordersCodes.length <= 0) return of([]);
+
+    // creando el arreglo de peticiones a realizar
+    const _request : Observable<SmallResp>[] = bordersCodes.map((code:string)=>{
+      return this.getContrySmallByCode(code);
+    });
+
+    // ejecutando todas las peticiones y retornando el arreglo de paises
+    return combineLatest(_request);
   }
 }

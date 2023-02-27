@@ -50,8 +50,8 @@
           <option value="null" *ngIf="borders.length == 0" selected>-- NOT BORDERS --</option>
           <option 
             *ngFor="let border of borders"
-            [value]="border"
-          >{{border}}</option>
+            [value]="border.cca2"
+          >{{border.name.common}}</option>
         </select>
         <label class="form-label">Borders</label>
       </div>

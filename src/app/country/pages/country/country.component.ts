@@ -15,7 +15,7 @@ export class CountryComponent implements OnInit{
 
   public regions    : string[] = [];
   public countries !: SmallResp[] | null;
-  public borders   !: string[]    | null;
+  public borders   !: SmallResp[] | null;
   public loading    : boolean = false;
 
   constructor(private contryService : CountryService) {
@@ -62,18 +62,18 @@ export class CountryComponent implements OnInit{
           this.loading = true;
           this.selectorForm.get('borders')?.disable();
         }),
-        switchMap((_alphaCode:string) => this.contryService.getCountry({mode:'alpha', search:_alphaCode, smallResp:false}))
+        switchMap((_alphaCode:string) => this.contryService.getCountry({mode:'alpha', search:_alphaCode, smallResp:false})),
+        switchMap((_smallResp => this.contryService.getCountryByArrayCodes(_smallResp ? _smallResp[0].borders : [])))
       )
-      .subscribe((_countries:Country[] | null)=>{
+      .subscribe((_countries:SmallResp[])=>{
         if(_countries === null) {
           return;
         }
-        console.log(_countries[0]?.borders);
-        this.borders = _countries[0]?.borders || [];
+        console.log(_countries);
+        this.borders = _countries;
         this.loading = false;
-        if(this.borders.length > 0){
-          this.selectorForm.get('borders')?.enable();
-        }
+        this.selectorForm.get('borders')?.enable();
+        
     })
   
   }
